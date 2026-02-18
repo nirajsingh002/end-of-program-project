@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
 import numpy as np
 import tensorflow as tf
@@ -6,6 +6,8 @@ import joblib
 from fastapi.middleware.cors import CORSMiddleware
 from ai.transformer import generate_explanation
 from services.fertilizer import recommend_fertilizer
+import gettext
+import os
 
 app = FastAPI()
 
@@ -66,4 +68,33 @@ def predict_crop(data: SoilInput):
         "explanation": explanation,
         "fertilizer": fertilizer,
         "confidence": confidence,
+        "ph": data.ph,
+        "rainfall": data.rainfall,
+        "temperature": data.temperature
+    }
+
+# locales testing
+def get_translator(lang: str):
+    localedir = os.path.join(os.path.dirname(__file__), "translations")
+    return gettext.translation(
+        "messages",
+        localedir=localedir,
+        languages=[lang],
+        fallback=True
+    )
+
+@app.middleware("http")
+async def add_language_to_request(request: Request, call_next):
+    lang = request.headers.get("Accept-Language", "en")
+    request.state.lang = lang.split(",")[0]
+    response = await call_next(request)
+    return response
+
+@app.get("/hello")
+async def hello(request: Request):
+    translator = get_translator(request.state.lang)
+    _ = translator.gettext
+
+    return {
+        "message": _("Welcome to our application")
     }

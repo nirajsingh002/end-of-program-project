@@ -1,0 +1,9 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Language: hi\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Welcome to our application"
+msgstr "हमारे एप्लिकेशन में आपका स्वागत है"

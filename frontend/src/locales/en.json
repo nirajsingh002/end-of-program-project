@@ -1,0 +1,8 @@
+{
+  "crop_explanation": "{{crop}} is a suitable crop for these soil conditions because it requires high levels of nitrogen, phosphorus, and potassium. A stable temperature of {{temperature}} °C, pH level of {{ph}}, and rainfall of {{rainfall}} mm are ideal for its growth.",
+  "crops": {
+    "rice": "Rice",
+    "Wheat": "Wheat",
+    "Maize": "Maize"
+  }
+}
