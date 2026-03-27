@@ -1,9 +1,15 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import pickle
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+fertilizer_model_path = os.path.join(BASE_DIR, "fertilizer_model.pkl")
+fertilizer_columns_path = os.path.join(BASE_DIR, "fertilizer_columns.pkl")
+
 
 # Load dataset
-data = pd.read_csv("../dataset/fertilizer.csv")
+data = pd.read_csv("../dataset/fertilizer.csv", encoding='latin1')
 
 # Separate target
 y = data["Fertilizer Name"]
@@ -19,11 +25,10 @@ model = RandomForestClassifier()
 model.fit(X, y)
 
 # Save model
-with open("models/fertilizer_model.pkl", "wb") as f:
+with open(fertilizer_model_path, "wb") as f:
     pickle.dump(model, f)
-
 # Save feature columns for prediction
-with open("models/fertilizer_columns.pkl", "wb") as f:
+with open(fertilizer_columns_path, "wb") as f:
     pickle.dump(X.columns, f)
 
 print("Model trained and saved successfully.")

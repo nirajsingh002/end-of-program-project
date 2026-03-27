@@ -1,0 +1,38 @@
+services:
+  # Backend (FastAPI + ML + Ollama client)
+  backend:
+    build: ./backend
+    container_name: crop-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
+
+  # Frontend (React App)
+  frontend:
+    build: ./frontend
+    container_name: crop-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    stdin_open: true
+    depends_on:
+      - backend
+
+  # Ollama
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  ollama_data:

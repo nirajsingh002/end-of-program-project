@@ -1,0 +1,12 @@
+.btn {
+  padding: 12px 25px;
+  background-color: #2e7d32;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn:disabled {
+  background-color: #828983;
+  cursor: default;
+}

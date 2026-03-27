@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File
 from pydantic import BaseModel
 import numpy as np
 import tensorflow as tf
@@ -8,6 +8,9 @@ from ai.transformer import generate_explanation
 from services.fertilizer import recommend_fertilizer
 import gettext
 import os
+import shutil
+import pickle
+from utils.image_features import extract_features
 
 app = FastAPI()
 
@@ -23,6 +26,36 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Load models
+pca = pickle.load(open("models/pca_model.pkl", "rb"))
+npk_model = pickle.load(open("models/npk_model.pkl", "rb"))
+scaler_npk = pickle.load(open("models/scaler.pkl", "rb"))
+# crop_model = pickle.load(open("models/crop_model.pkl", "rb"))
+
+# -------------------------------
+# API 1: Upload Image & Get NPK
+# -------------------------------
+@app.post("/get-npk")
+async def upload_image(image: UploadFile = File(...)):
+
+    file_path = f"uploads/{image.filename}"
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(image.file, buffer)
+
+    features = extract_features(file_path)
+    features = np.array(features).reshape(1, -1)
+    features_scaled = scaler_npk.transform(features)
+    features_pca = pca.transform(features_scaled)
+
+    npk = npk_model.predict(features_pca)
+
+    return {
+        "Nitrogen": float(npk[0][0]),
+        "Phosphorus": float(npk[0][1]),
+        "Potassium": float(npk[0][2])
+    }
 
 # Load model and preprocessors
 model = tf.keras.models.load_model("crop_model.h5")
@@ -59,7 +92,7 @@ def predict_crop(data: SoilInput):
     predicted_index = np.argmax(prediction)
     crop_name = encoder.inverse_transform([predicted_index])[0]
     explanation = generate_explanation(crop_name, data)
-    fertilizer = recommend_fertilizer(data)
+    fertilizer = recommend_fertilizer(data, crop_name)
 
     confidence = float(np.max(prediction)) * 100
 

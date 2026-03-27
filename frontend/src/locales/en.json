@@ -3,6 +3,9 @@
   "crops": {
     "rice": "Rice",
     "Wheat": "Wheat",
-    "Maize": "Maize"
+    "Maize": "Maize",
+    "coconut": "Coconut",
+    "jute": "Jute",
+    "papaya": "Papaya"
   }
 }

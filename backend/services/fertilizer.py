@@ -9,8 +9,8 @@ with open("models/fertilizer_model.pkl", "rb") as f:
 with open("models/fertilizer_columns.pkl", "rb") as f:
     training_columns = pickle.load(f)
 
-def recommend_fertilizer(input_data):
-
+def recommend_fertilizer(input_data, predicted_crop):
+    print("input_data====>", input_data, predicted_crop)
     # Create dataframe from input
     input_dict = {
         "Temperature": input_data.temperature,
@@ -20,7 +20,9 @@ def recommend_fertilizer(input_data):
         "Potassium": input_data.K,
         "Phosphorus": input_data.P,
         "Soil_Type": "Sandy",  # must match dataset categories
-        "Crop_Type": "Rice"    # dynamic if needed
+        # "Crop_Type": "Rice"    # dynamic if needed
+        # "Soil_Type": input_data.soil_type,
+        "Crop_Type": predicted_crop
     }
 
     input_df = pd.DataFrame([input_dict])

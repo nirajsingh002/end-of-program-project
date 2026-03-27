@@ -4,18 +4,16 @@ import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
 import hi from "./locales/hi.json";
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources: {
-      en: { translation: en },
-      hi: { translation: hi }
-    },
-    lng: "hi",          // default Hindi
-    fallbackLng: "hi",
-    interpolation: {
-      escapeValue: false
-    }
-  });
+i18n.use(initReactI18next).init({
+  resources: {
+    en: { translation: en },
+    hi: { translation: hi },
+  },
+  lng: "en", // default Hindi
+  fallbackLng: "en",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18n;

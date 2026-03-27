@@ -1,3 +1,4 @@
+import os
 import ollama
 
 def generate_explanation(crop, input_data):
@@ -18,10 +19,10 @@ def generate_explanation(crop, input_data):
     """
 
     response = ollama.chat(
-        model='deepseek-llm',   # or 'deepseek-coder'
+        model='phi3',   # or 'deepseek-llm'
         messages=[
             {"role": "user", "content": prompt}
-        ]
+        ],
     )
 
     explanation = response['message']['content']

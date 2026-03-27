@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pandas
+numpy
+scikit-learn
+reportlab
+python-multipart
+requests
+transformers
+torch
+tensorflow
+opencv-python-headless
+ollama
