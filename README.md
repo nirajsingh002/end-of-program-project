@@ -32,3 +32,5 @@ on test data.
 # Docker compose used to run the application
 
 docker compose up
+
+![alt text](Application_screenshot.png)
